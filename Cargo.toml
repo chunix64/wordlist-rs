@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "crates/wordlist-cli",
+  "crates/wordlist-core"
+]
+
+resolver = "2"
