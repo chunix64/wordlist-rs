@@ -9,6 +9,7 @@ use crate::parser::{
     html::HtmlParser,
     pdf::PdfParser,
     plain_text::PlainTextParser,
+    rtf::RtfParser,
     wordlist::{generate_word_list, merge_word_list},
 };
 
@@ -41,6 +42,9 @@ fn get_parser(file: &Path) -> Option<Box<dyn WordListParser>> {
         }
         Ok(Some(kind)) if kind.mime_type() == "text/html" => {
             return Some(Box::new(HtmlParser));
+        }
+        Ok(Some(kind)) if kind.mime_type() == "application/rtf" => {
+            return Some(Box::new(RtfParser));
         }
 
         Ok(Some(kind)) => {

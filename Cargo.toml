@@ -9,6 +9,7 @@ docx-lite = "0.2.0"
 epub = "2.1.5"
 infer = "0.19.0"
 pdf_oxide = "0.3.38"
+rtf-parser = "0.4.2"
 scraper = "0.26.0"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
