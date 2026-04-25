@@ -4,7 +4,9 @@ use std::{
 };
 
 use crate::parser::{
+    docx::DocxParser,
     epub::EpubParser,
+    html::HtmlParser,
     pdf::PdfParser,
     plain_text::PlainTextParser,
     wordlist::{generate_word_list, merge_word_list},
@@ -30,6 +32,15 @@ fn get_parser(file: &Path) -> Option<Box<dyn WordListParser>> {
         }
         Ok(Some(kind)) if kind.mime_type() == "application/pdf" => {
             return Some(Box::new(PdfParser));
+        }
+        Ok(Some(kind))
+            if kind.mime_type()
+                == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =>
+        {
+            return Some(Box::new(DocxParser));
+        }
+        Ok(Some(kind)) if kind.mime_type() == "text/html" => {
+            return Some(Box::new(HtmlParser));
         }
 
         Ok(Some(kind)) => {
