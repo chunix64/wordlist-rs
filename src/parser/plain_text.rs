@@ -1,5 +1,6 @@
-use crate::parser::WordListParser;
 use std::{fs, path::Path};
+
+use crate::parser::processor::WordListParser;
 
 pub struct PlainTextParser;
 

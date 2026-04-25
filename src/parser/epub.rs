@@ -1,7 +1,7 @@
 use epub::doc::EpubDoc;
 use std::path::Path;
 
-use crate::{parser::WordListParser, utils::text::extract_text_from_html};
+use crate::{parser::processor::WordListParser, utils::text::extract_text_from_html};
 
 pub struct EpubParser;
 

@@ -1,6 +1,7 @@
-use crate::parser::WordListParser;
 use pdf_oxide::PdfDocument;
 use std::path::Path;
+
+use crate::parser::processor::WordListParser;
 
 pub struct PdfParser;
 
