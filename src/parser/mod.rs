@@ -1,5 +1,6 @@
 pub mod epub;
 pub mod pdf;
+pub mod plain_text;
 
 use std::{
     collections::HashMap,
@@ -13,9 +14,21 @@ fn merge_word_list(word_list_1: &mut HashMap<String, u64>, word_list_2: HashMap<
 }
 
 fn parse_file(file: &Path) -> Option<HashMap<String, u64>> {
+    if let Some(ext) = file.extension().and_then(|ext| ext.to_str()) {
+        match ext {
+            "txt" => return plain_text::parse_word_list(file),
+            "md" => return plain_text::parse_word_list(file),
+            "log" => return plain_text::parse_word_list(file),
+            _ => {}
+        }
+    }
+
     match infer::get_from_path(file) {
         Ok(Some(kind)) if kind.mime_type() == "application/epub+zip" => {
-            return epub::parse_word_list(file)
+            return epub::parse_word_list(file);
+        }
+        Ok(Some(kind)) if kind.mime_type() == "application/pdf" => {
+            return pdf::parse_word_list(file);
         }
         Ok(Some(kind)) => {
             println!("[INFO] Skipping unsupported type: {}", kind.mime_type());

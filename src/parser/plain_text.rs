@@ -1,13 +1,10 @@
-use std::{collections::HashMap, path::Path};
-
-use pdf_oxide::PdfDocument;
+use std::{collections::HashMap, fs, path::Path};
 
 use crate::utils::text::clean_word;
 
 pub fn parse_word_list(file: &Path) -> Option<HashMap<String, u64>> {
     let mut word_list = HashMap::new();
-    let mut doc = PdfDocument::open(file).unwrap();
-    let all_text = doc.extract_all_text().unwrap();
+    let all_text = fs::read_to_string(file).unwrap();
 
     for word in all_text.split_whitespace() {
         let clean = clean_word(word);
