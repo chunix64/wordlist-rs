@@ -5,6 +5,6 @@ mod pdf;
 mod plain_text;
 mod processor;
 mod rtf;
-mod wordlist;
+pub mod wordlist;
 
 pub use processor::parse_word_list;

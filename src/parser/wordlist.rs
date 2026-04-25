@@ -21,3 +21,14 @@ pub fn merge_word_list(word_list_1: &mut HashMap<String, u64>, word_list_2: Hash
         *word_list_1.entry(word).or_insert(0) += frequency;
     }
 }
+
+pub fn get_word_list_size(word_list: &HashMap<String, u64>) -> (u64, u64) {
+    let mut word_list_size = (0, 0);
+
+    for frequency in word_list.values() {
+        word_list_size.0 += 1;
+        word_list_size.1 += *frequency;
+    }
+
+    word_list_size
+}
