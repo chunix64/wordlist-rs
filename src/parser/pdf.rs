@@ -1,21 +1,15 @@
-use std::{collections::HashMap, path::Path};
-
+use crate::parser::WordListParser;
 use pdf_oxide::PdfDocument;
+use std::path::Path;
 
-use crate::utils::text::clean_word;
+pub struct PdfParser;
 
-pub fn parse_word_list(file: &Path) -> Option<HashMap<String, u64>> {
-    let mut word_list = HashMap::new();
-    let mut doc = PdfDocument::open(file).unwrap();
-    let all_text = doc.extract_all_text().unwrap();
-
-    for word in all_text.split_whitespace() {
-        let clean = clean_word(word);
-
-        if !clean.is_empty() {
-            *word_list.entry(clean).or_insert(0) += 1;
+impl WordListParser for PdfParser {
+    fn extract_all_text(&self, file: &Path) -> Option<String> {
+        if let Ok(mut doc) = PdfDocument::open(file) {
+            return doc.extract_all_text().ok();
         }
-    }
 
-    Some(word_list)
+        None
+    }
 }

@@ -5,6 +5,7 @@ use crate::{
     formatter::get_formatter,
 };
 
+// Collect files from mixed directories and files
 pub fn collect_files(paths: &[PathBuf], recursive: bool) -> Vec<PathBuf> {
     let mut files = Vec::new();
 
@@ -14,16 +15,43 @@ pub fn collect_files(paths: &[PathBuf], recursive: bool) -> Vec<PathBuf> {
         } else if path.is_dir() {
             if recursive {
                 for entry in walkdir::WalkDir::new(path) {
-                    let entry = entry.unwrap();
-                    if entry.path().is_file() {
-                        files.push(entry.path().to_path_buf());
-                    }
+                    match entry {
+                        Ok(entry) => {
+                            if entry.path().is_file() {
+                                files.push(entry.path().to_path_buf());
+                            }
+                        }
+                        Err(error) => {
+                            eprintln!("[ERROR] WalkDir error at {}: {}", path.display(), error);
+                        }
+                    };
                 }
             } else {
-                for entry in std::fs::read_dir(path).unwrap() {
-                    let entry = entry.unwrap();
-                    if entry.path().is_file() {
-                        files.push(entry.path().to_path_buf());
+                match std::fs::read_dir(path) {
+                    Ok(entries) => {
+                        for entry in entries {
+                            match entry {
+                                Ok(entry) => {
+                                    if entry.path().is_file() {
+                                        files.push(entry.path().to_path_buf());
+                                    }
+                                }
+                                Err(error) => {
+                                    eprintln!(
+                                        "[ERROR] Failed to read entry in {}: {}",
+                                        path.display(),
+                                        error
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Err(error) => {
+                        eprintln!(
+                            "[ERROR] Failed to read directory {}: {}",
+                            path.display(),
+                            error
+                        );
                     }
                 }
             }
@@ -40,7 +68,13 @@ pub fn save_word_list(
     sort_order: &SortOrder,
 ) {
     let formatter = get_formatter(output_format);
-    let content = formatter.format(word_list, sort_order);
+    let content = match formatter.format(word_list, sort_order) {
+        Some(content) => content,
+        None => {
+            eprintln!("[ERROR] Failed to format word list");
+            return;
+        }
+    };
 
     let file_name: String = match output {
         Some(path) => path
@@ -53,5 +87,7 @@ pub fn save_word_list(
 
     let path = format!("{}.{}", file_name, output_format.as_str());
 
-    fs::write(path, content).unwrap();
+    if let Err(error) = fs::write(&path, content) {
+        eprintln!("[ERROR] Failed to write file {}: {}", path, error);
+    }
 }

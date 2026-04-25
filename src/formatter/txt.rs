@@ -6,7 +6,7 @@ use std::fmt::Write;
 pub struct TxtFormatter;
 
 impl Formatter for TxtFormatter {
-    fn format(&self, word_list: &HashMap<String, u64>, sort_order: &SortOrder) -> String {
+    fn format(&self, word_list: &HashMap<String, u64>, sort_order: &SortOrder) -> Option<String> {
         let items = sort_word_list(word_list, sort_order);
         let mut result = String::new();
 
@@ -15,9 +15,11 @@ impl Formatter for TxtFormatter {
                 result.push('\n');
             }
 
-            write!(result, "{key} {value}").unwrap();
+            if write!(result, "{key} {value}").is_err() {
+                return None;
+            };
         }
 
-        result
+        Some(result)
     }
 }

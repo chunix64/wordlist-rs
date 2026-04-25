@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use txt::TxtFormatter;
 
 pub trait Formatter {
-    fn format(&self, word_list: &HashMap<String, u64>, sort_order: &SortOrder) -> String;
+    fn format(&self, word_list: &HashMap<String, u64>, sort_order: &SortOrder) -> Option<String>;
 }
 
 fn sort_word_list<'a>(

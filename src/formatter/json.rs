@@ -6,7 +6,7 @@ use std::collections::HashMap;
 pub struct JsonFormatter;
 
 impl Formatter for JsonFormatter {
-    fn format(&self, word_list: &HashMap<String, u64>, sort_order: &SortOrder) -> String {
+    fn format(&self, word_list: &HashMap<String, u64>, sort_order: &SortOrder) -> Option<String> {
         let items = sort_word_list(word_list, sort_order);
         let result: Vec<WordEntry> = items
             .into_iter()
@@ -16,7 +16,7 @@ impl Formatter for JsonFormatter {
             })
             .collect();
 
-        serde_json::to_string(&result).unwrap()
+        serde_json::to_string(&result).ok()
     }
 }
 
