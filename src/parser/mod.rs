@@ -1,7 +1,7 @@
-pub mod epub;
-pub mod pdf;
-pub mod plain_text;
-pub mod processor;
-pub mod wordlist;
+mod epub;
+mod pdf;
+mod plain_text;
+mod processor;
+mod wordlist;
 
 pub use processor::parse_word_list;

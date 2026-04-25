@@ -16,10 +16,10 @@ pub trait WordListParser {
 
 fn get_parser(file: &Path) -> Option<Box<dyn WordListParser>> {
     if let Some(ext) = file.extension().and_then(|ext| ext.to_str()) {
-        match ext {
-            "txt" => return Some(Box::new(PlainTextParser)),
-            "md" => return Some(Box::new(PlainTextParser)),
-            "log" => return Some(Box::new(PlainTextParser)),
+        match ext.to_lowercase().as_str() {
+            "txt" | "md" | "log" | "rst" | "text" | "csv" | "tsv" => {
+                return Some(Box::new(PlainTextParser));
+            }
             _ => {}
         }
     }
