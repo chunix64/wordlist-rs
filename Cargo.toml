@@ -1,7 +1,13 @@
-[workspace]
-members = [
-  "crates/wordlist-cli",
-  "crates/wordlist-core"
-]
+[package]
+name = "wordlist-cli"
+version = "0.1.0"
+edition = "2024"
 
-resolver = "2"
+[dependencies]
+clap = { version = "4.6.1", features = ["derive"] }
+epub = "2.1.5"
+infer = "0.19.0"
+scraper = "0.26.0"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+walkdir = "2.5.0"
