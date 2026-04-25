@@ -62,7 +62,6 @@ fn get_parser(file: &Path) -> Option<Box<dyn WordListParser>> {
 }
 
 fn parse_file(file: &Path) -> Option<String> {
-    println!("[INFO] Processing file: {}", file.display());
     let parser = get_parser(file)?;
     parser.extract_all_text(file)
 }
@@ -71,10 +70,12 @@ pub fn parse_word_list(files: Vec<PathBuf>) -> HashMap<String, u64> {
     let mut word_list = HashMap::new();
 
     for file in files {
+        println!("[INFO] Processing file: {}", file.display());
         if let Some(text) = parse_file(&file)
             && let Some(partial) = generate_word_list(&text)
         {
             merge_word_list(&mut word_list, partial);
+            println!("[INFO] Processed file: {}", file.display());
         }
     }
 
